@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Binary Portal</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            color: #00ffae;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .text-box {
+            background: rgba(0, 0, 0, 0.65);
+            padding: 20px 30px;
+            border: 2px solid #00ffd5;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ffd5;
+            margin-bottom: 20px;
+        }
+
+        .binary-link {
+            font-size: 2.5rem;
+            color: #00ffc8;
+            text-decoration: none;
+            letter-spacing: 3px;
+            transition: 0.3s;
+        }
+
+        .binary-link:hover {
+            color: white;
+            text-shadow: 0 0 10px #00ffd9, 0 0 20px #00ffd9;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border-radius: 5px;
+            border: 2px solid #00ffd5;
+            background: #000;
+            color: #00ffae;
+            width: 200px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            background: #00ffd5;
+            border: none;
+            border-radius: 5px;
+        } 
+    </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div id="passwordBox" class="center">
+    <div class="text-box">
+        <h2>กรอกรหัสผ่าน</h2>
+        <h4>ใบ้ 1101010000110001</h4>
+        <input type="password" id="passwordInput" placeholder="ใส่รหัส...">
+        <br>
+        <button onclick="checkPassword()">เข้าสู่ระบบ</button>
+    </div>
+</div>
+
+<div id="mainContent" class="center hidden">
+    <div class="text-box">
+        <h1><a class="binary-link" href="index2.html">กด</a></h1>
+    </div>
+</div>
+
+<script>
+    // MATRIX BACKGROUND
+    const c = document.getElementById("matrix");
+    const ctx = c.getContext("2d");
+    c.height = window.innerHeight;
+    c.width = window.innerWidth;
+
+    const chars = "01";
+    const drops = Array(Math.floor(c.width / 10)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0,0,0,0.05)";
+        ctx.fillRect(0, 0, c.width, c.height);
+
+        ctx.fillStyle = "#00ffcc";
+        ctx.font = "14px monospace";
+
+        drops.forEach((y, i) => {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * 10, y * 20);
+
+            if (y * 20 > c.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        });
+    }
+
+    setInterval(drawMatrix, 40);
+
+    // PASSWORD CHECK
+    function checkPassword() {
+        const pwd = document.getElementById("passwordInput").value;
+        if (pwd === "54321") {
+            document.getElementById("passwordBox").classList.add("hidden");
+            document.getElementById("mainContent").classList.remove("hidden");
+        } else {
+            alert("รหัสผ่านไม่ถูกต้อง!");
+        }
+    }
+</script>
+
+</body>
+</html>
